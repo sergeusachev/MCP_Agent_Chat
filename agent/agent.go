@@ -85,11 +85,16 @@ func (a *Agent) SendMessage(message string) (string, error) {
 
 	// Check if GigaChat wants to call a function
 	if result.FinishReason == "function_call" && result.FunctionCall != nil {
+		fmt.Printf("\n[Agent] Using MCP tool: %s\n", result.FunctionCall.Name)
+		fmt.Printf("[Agent] Tool arguments: %v\n", result.FunctionCall.Arguments)
+
 		// Call MCP tool
 		toolResult, err := a.callMCPTool(result.FunctionCall)
 		if err != nil {
 			return "", fmt.Errorf("failed to call MCP tool: %w", err)
 		}
+
+		fmt.Printf("[Agent] Tool result: %s\n", toolResult)
 
 		// Add assistant's function call to messages
 		a.messages = append(a.messages, *result.Message)
@@ -99,6 +104,8 @@ func (a *Agent) SendMessage(message string) (string, error) {
 			Role:    "user",
 			Content: fmt.Sprintf("Function %s result: %s", result.FunctionCall.Name, toolResult),
 		})
+
+		fmt.Printf("[Agent] Getting final answer from GigaChat...\n\n")
 
 		// Get final answer from GigaChat
 		finalResult, err := a.gigaChatNetworkService.GetCompletion(a.messages, a.Model, a.temperature, a.functions)
@@ -111,6 +118,7 @@ func (a *Agent) SendMessage(message string) (string, error) {
 	}
 
 	// No function call, just return the message
+	fmt.Printf("\n[Agent] No MCP tool used - direct response\n\n")
 	a.messages = append(a.messages, *result.Message)
 	return result.Message.Content, nil
 }
