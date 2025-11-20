@@ -1,0 +1,121 @@
+{
+    "choices": [
+        {
+            "message": {
+                "content": "",
+                "role": "assistant",
+                "function_call": {
+                    "name": "search_files",
+                    "arguments": {
+                        "pattern": "*.txt"
+                    }
+                },
+                "functions_state_id": "019aa12e-fdeb-757a-9a9c-167d4d37a986"
+            },
+            "index": 0,
+            "finish_reason": "function_call"
+        }
+    ],
+    "created": 1763640802,
+    "model": "GigaChat-2:2.0.28.2",
+    "object": "chat.completion",
+    "usage": {
+        "prompt_tokens": 135,
+        "completion_tokens": 24,
+        "total_tokens": 159,
+        "precached_prompt_tokens": 0
+    }
+}
+
+
+
+
+
+{
+    "choices": [
+        {
+            "message": {
+                "content": "",
+                "role": "assistant",
+                "function_call": {
+                    "name": "read_files",
+                    "arguments": {
+                        "paths": "my_example.txt"
+                    }
+                },
+                "functions_state_id": "019aa130-cbd7-7d8f-85f7-69c902765113"
+            },
+            "index": 0,
+            "finish_reason": "function_call"
+        }
+    ],
+    "created": 1763640921,
+    "model": "GigaChat-2:2.0.28.2",
+    "object": "chat.completion",
+    "usage": {
+        "prompt_tokens": 222,
+        "completion_tokens": 25,
+        "total_tokens": 247,
+        "precached_prompt_tokens": 0
+    }
+}
+
+
+
+
+
+{
+    "choices": [
+        {
+            "message": {
+                "content": "",
+                "role": "assistant",
+                "function_call": {
+                    "name": "summurize",
+                    "arguments": {
+                        "text": "Hello Sergei!"
+                    }
+                },
+                "functions_state_id": "019aa132-b287-7782-86d8-d87f5fef5a12"
+            },
+            "index": 0,
+            "finish_reason": "function_call"
+        }
+    ],
+    "created": 1763641045,
+    "model": "GigaChat-2:2.0.28.2",
+    "object": "chat.completion",
+    "usage": {
+        "prompt_tokens": 294,
+        "completion_tokens": 27,
+        "total_tokens": 321,
+        "precached_prompt_tokens": 0
+    }
+}
+
+
+
+
+
+{
+    "choices": [
+        {
+            "message": {
+                "content": "Анализируемый текст является простым приветствием: «Hello Sergei!».\n\n**Краткий итог:**  \nТекст представляет собой дружеское обращение к Сергею.",
+                "role": "assistant",
+                "functions_state_id": "019aa134-3875-741d-850e-4a0f62a90819"
+            },
+            "index": 0,
+            "finish_reason": "stop"
+        }
+    ],
+    "created": 1763641145,
+    "model": "GigaChat-2:2.0.28.2",
+    "object": "chat.completion",
+    "usage": {
+        "prompt_tokens": 369,
+        "completion_tokens": 37,
+        "total_tokens": 406,
+        "precached_prompt_tokens": 0
+    }
+}

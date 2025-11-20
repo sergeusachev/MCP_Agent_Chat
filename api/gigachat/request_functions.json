@@ -1,0 +1,104 @@
+{
+    "model": "GigaChat-2",
+    "messages": [
+        {
+            "role": "user",
+            "content": "Find files ended with .txt, read it and summirize"
+        },
+        {
+            "content": "",
+            "role": "assistant",
+            "function_call": {
+                "name": "search_files",
+                "arguments": {
+                    "pattern": "*.txt"
+                }
+            }
+        },
+        {
+            "role": "function",
+            "content": "{ \"name\": \"search_files\",\"arguments\": { \"files\": [\"path/to/file1.txt\", \"path/to/file2.txt\"] } }"
+        },
+        {
+            "content": "",
+            "role": "assistant",
+            "function_call": {
+                "name": "read_files",
+                "arguments": {
+                    "files": [
+                        "path/to/file1.txt",
+                        "path/to/file2.txt"
+                    ]
+                }
+            }
+        },
+        {
+            "role": "function",
+            "content": "{ \"name\": \"read_files\",\"arguments\": { \"text\": \"contets of files\" } }"
+        },
+        {
+            "content": "",
+            "role": "assistant",
+            "function_call": {
+                "name": "summarize",
+                "arguments": {
+                    "text": "contets of files"
+                }
+            }
+        },
+        {
+            "role": "function",
+            "content": "{ \"name\": \"summarize\",\"arguments\": { \"summary\": \"This files is about - ...\" } }"
+        }
+    ],
+    "function_call": "auto",
+    "functions": [
+        {
+            "name": "search_files",
+            "description": "Searches files in filesystem",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "pattern": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "pattern"
+                ]
+            }
+        },
+        {
+            "name": "read_files",
+            "description": "Reads files",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "files": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "files"
+                ]
+            }
+        },
+        {
+            "name": "summarize",
+            "description": "Summarize text",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "summary": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "summary"
+                ]
+            }
+        }
+    ],
+    "temperature": 0,
+    "repetition_penalty": 1
+}
