@@ -17,11 +17,17 @@ func main() {
 		fmt.Println("Agent creation error: ", err)
 		os.Exit(1)
 	}
-	testContext := ""
+	testContext := "You are a helpful assistant with access to various tools." +
+		"Use tools only when necessary to complete the user's request. For general knowledge questions," + 
+		"answer directly. For tasks involving files, cryptocurrency prices, or other tool-specific operations," +
+		"use the appropriate tools. When a task requires multiple steps with tools, call them sequentially."
+
 	agentInstance.SetContext(testContext)
 
 	testMessage(agentInstance, "In which year did WW2 start?")
 	testMessage(agentInstance, "How much is bitcoin price in usd?")
+	testMessage(agentInstance, 
+		"Найди все текстовые файлы, прочитай их и коротко перескажи что там. Результат сохрани в файл summary.txt")
 	
 }
 

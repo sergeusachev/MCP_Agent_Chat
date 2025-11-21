@@ -136,8 +136,9 @@ func (networkService *NetworkService) GetCompletion(messages []Message, model st
 
 	return &CompletionResult{
 		Message: &Message{
-			Role:    choice.Message.Role,
-			Content: choice.Message.Content,
+			Role:         choice.Message.Role,
+			Content:      choice.Message.Content,
+			FunctionCall: choice.Message.FunctionCall,
 		},
 		FinishReason: choice.FinishReason,
 		FunctionCall: choice.Message.FunctionCall,

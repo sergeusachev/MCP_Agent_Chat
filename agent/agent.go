@@ -77,6 +77,10 @@ func (a *Agent) SendMessage(message string) (string, error) {
 		Content: message,
 	})
 
+	return a.processCompletion()
+}
+
+func (a *Agent) processCompletion() (string, error) {
 	// Call GigaChat with functions
 	result, err := a.gigaChatNetworkService.GetCompletion(a.messages, a.Model, a.temperature, a.functions)
 	if err != nil {
@@ -99,25 +103,25 @@ func (a *Agent) SendMessage(message string) (string, error) {
 		// Add assistant's function call to messages
 		a.messages = append(a.messages, *result.Message)
 
-		// Add function result as user message
+		// Add function result as function message with proper format
+		// GigaChat expects: {"name": "function_name", "arguments": {"result": "..."}}
+		// JSON-encode the tool result to ensure proper escaping
+		resultJSON, err := json.Marshal(toolResult)
+		if err != nil {
+			return "", fmt.Errorf("failed to marshal tool result: %w", err)
+		}
+		functionResultContent := fmt.Sprintf(`{"name": "%s", "arguments": %s}`, result.FunctionCall.Name, string(resultJSON))
+
 		a.messages = append(a.messages, gigachat.Message{
-			Role:    "user",
-			Content: fmt.Sprintf("Function %s result: %s", result.FunctionCall.Name, toolResult),
+			Role:    "function",
+			Content: functionResultContent,
 		})
 
-		fmt.Printf("[Agent] Getting final answer from GigaChat...\n\n")
-
-		// Get final answer from GigaChat
-		finalResult, err := a.gigaChatNetworkService.GetCompletion(a.messages, a.Model, a.temperature, a.functions)
-		if err != nil {
-			return "", fmt.Errorf("failed to get final answer: %w", err)
-		}
-
-		a.messages = append(a.messages, *finalResult.Message)
-		return finalResult.Message.Content, nil
+		// Recursive call - process the next completion
+		return a.processCompletion()
 	}
 
-	// No function call, just return the message
+	// No function call - we have the final answer
 	fmt.Printf("\n[Agent] No MCP tool used - direct response\n\n")
 	a.messages = append(a.messages, *result.Message)
 	return result.Message.Content, nil
